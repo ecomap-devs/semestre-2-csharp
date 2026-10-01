@@ -1,0 +1,43 @@
+@model IEnumerable<dynamic>
+@{
+    ViewData["Title"] = "Avaliações";
+    Layout = null;
+}
+<link rel="stylesheet" href="~/css/avaliacao.css" />
+
+<a asp-controller="Home" asp-action="Index"
+   class="jorge" 
+   title="Voltar à Página Inicial">
+    Voltar à Página Inicial
+</a>
+
+    <h2 class="m-0">Avaliações</h2>
+
+    <div style="flex:1"></div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <p class="m-0"><a asp-action="Create" class="btn btn-primary">Deixar avaliação</a></p>
+    }
+</div>
+
+<table class="table table-striped">
+    <thead><tr><th>Usuário</th><th>Comentário</th><th>Nota</th><th>Data</th><th>Ações</th></tr></thead>
+    <tbody>
+    @foreach (var a in Model)
+    {
+        <tr>
+            <td>@a.UsuarioNome</td>
+            <td>@a.Comentario</td>
+            <td>@a.Nota</td>
+            <td>@((DateTime)a.DataAvaliacao).ToLocalTime().ToString("g")</td>
+            <td>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a asp-action="Edit" asp-route-id="@a.IdAvaliacao" class="btn btn-sm btn-secondary">Editar</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

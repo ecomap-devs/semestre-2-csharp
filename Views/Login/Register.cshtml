@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "Registrar";
+    Layout = null;
+}
+<link rel="stylesheet" href="~/css/register.css" />
+
+<form asp-action="Register" method="post">
+    @Html.AntiForgeryToken()
+
+    <h2 style="text-align:center; margin-bottom:18px;">Registrar</h2>
+
+    <div class="mb-3">
+        <label>Nome</label>
+        <input class="form-control" name="nome" required />
+    </div>
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" class="form-control" name="email" required />
+    </div>
+    <div class="mb-3">
+        <label>Senha</label>
+        <input type="password" class="form-control" name="senha" required />
+    </div>
+
+    <div class="d-flex justify-content-between" style="gap:12px;">
+        <button type="button" class="btn btn-secondary" onclick="history.back(); return false;">Voltar</button>
+        <button class="btn btn-success" type="submit">Criar conta</button>
+    </div>
+
+    @if(ViewBag.Mensagem != null)
+{
+    <div class="btn btn-success" style="margin-top:12px;">@ViewBag.Mensagem</div>
+}
+</form>

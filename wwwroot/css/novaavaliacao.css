@@ -1,0 +1,159 @@
+﻿/* ---------- ESTILO GERAL ---------- */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f3f7f4;
+    color: #333;
+    margin: 0;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column; /* título em cima do formulário */
+    justify-content: flex-start;
+    align-items: center; /* centraliza título e formulário */
+    min-height: 100vh;
+}
+
+/* ---------- TÍTULO ---------- */
+h2 {
+    text-align: center;
+    color: #2e7d32;
+    font-weight: 700;
+    margin: 0 0 18px 0; /* espaço abaixo do título */
+}
+
+/* ---------- FORMULÁRIO ---------- */
+form {
+    background-color: #ffffff;
+    padding: 30px 35px;
+    border-radius: 16px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 480px;
+    box-sizing: border-box;
+}
+
+/* ---------- CAMPOS ---------- */
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    color: #1b5e20;
+    margin-bottom: 8px;
+}
+
+/* Campo de texto (comentário) */
+textarea {
+    width: 100%;
+    height: 130px;
+    padding: 14px;
+    border: 1px solid #cfd8dc;
+    border-radius: 10px;
+    font-size: 1rem;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+    textarea:focus {
+        border-color: #43a047;
+        box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.2);
+        outline: none;
+    }
+
+/* Campo de número (nota) */
+input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cfd8dc;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+    input[type="number"]:focus {
+        border-color: #43a047;
+        box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.2);
+        outline: none;
+    }
+
+/* ---------- BOTÃO ENVIAR ---------- */
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #43a047;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: #2e7d32;
+        transform: translateY(-2px);
+    }
+ 
+/* Ações do formulário: botões alinhados lado a lado */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between; /* ajusta espaço entre os botões */
+    align-items: center;
+    margin-top: 8px;
+}
+
+/* override para que, dentro das ações, os botões ocupem metade cada */
+.form-actions .btn {
+    width: 48%;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+/* estilo específico do botão voltar */
+.btn-secondary {
+    background-color: #cfd8dc;
+    color: #1b5e20;
+    border: none;
+}
+
+/* hover do secundário */
+.btn-secondary:hover {
+    background-color: #bfc9c5;
+    transform: translateY(-1px);
+}
+
+/* garante que o botão primário mantenha visual */
+.btn-primary {
+    background-color: #43a047;
+    color: white;
+    border: none;
+}
+
+/* mantém comportamento responsivo: empilha em telas muito pequenas */
+@media (max-width: 420px) {
+    .form-actions {
+        flex-direction: column;
+    }
+    .form-actions .btn {
+        width: 100%;
+    }
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+@media (max-width: 600px) {
+    form {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+}

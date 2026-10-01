@@ -1,0 +1,115 @@
+﻿body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    margin: 0;
+    padding: 40px 20px;
+}
+
+/* Título */
+h2 {
+    text-align: center;
+    color: #2e7d32;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* Botão principal */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #43a047;
+    color: #fff;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #2e7d32;
+        transform: translateY(-2px);
+    }
+
+/* Botão secundário */
+.btn-secondary {
+    background-color: #607d8b;
+    color: #fff;
+    border: none;
+}
+
+    .btn-secondary:hover {
+        background-color: #455a64;
+        transform: translateY(-2px);
+    }
+
+/* Tabela */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+    .table thead {
+        background-color: #388e3c;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .table th, .table td {
+        padding: 14px 16px;
+        text-align: left;
+    }
+
+.table-striped tbody tr:nth-child(even) {
+    background-color: #f1f8f3;
+}
+
+.table-striped tbody tr:hover {
+    background-color: #e8f5e9;
+    transition: background-color 0.2s ease;
+}
+
+/* Ações */
+td a.btn-sm {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    margin-right: 5px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 10px;
+    }
+
+    .table th, .table td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .btn {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+}
+/* botao de voltar */
+.jorge {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}

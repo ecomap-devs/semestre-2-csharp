@@ -1,0 +1,903 @@
+﻿@{
+    ViewData["Title"] = "Início";
+}
+
+<!-- Slideshow -->
+<section class="slideshow relative text-white">
+    <div class="slides relative h-[420px] md:h-[520px] overflow-hidden">
+        <div class="slide" style="background-image: url('/images/animais/onca.jpg')"></div>
+        <div class="slide" style="background-image: url('/images/animais/arara.jpg')"></div>
+        <div class="slide" style="background-image: url('/images/animais/lobo.jpg')"></div>
+        <div class="slide" style="background-image: url('/images/animais/macaco.jpg')"></div>
+
+        <!-- Sobreposição e conteúdo -->
+        <div class="overlay absolute inset-0"></div>
+        <div class="container mx-auto px-4 h-full flex flex-col items-center justify-center relative z-10">
+            <h1 class="text-3xl md:text-5xl font-bold mb-6 fade-in">
+                O Desmatamento no Brasil é maior do que você imagina
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto fade-in">
+                Descubra como a perda de habitat está afetando nossa biodiversidade em todas as regiões do país.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 fade-in">
+                <a href="#mapa" class="bg-white text-green-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition">
+                    <i class="fas fa-map-marked-alt mr-2"></i> Ver Mapa
+                </a>
+                <a href="#animais" class="bg-transparent border-2 border-white text-white font-bold py-3 px-6 rounded-lg hover:bg-white hover:text-green-800 transition">
+                    <i class="fas fa-paw mr-2"></i> Espécies Ameaçadas
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<footer class="bg-green-900 text-white py-6 mt-0">
+    <div class="container mx-auto text-center text-sm">
+        © 2025 EcoMapBrasil. Dados obtidos de fontes públicas como INPE, IBGE e MapBiomas Alerta.
+    </div>
+</footer>
+
+<!-- O Desmatamento em Números -->
+<section class="py-12 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">O Desmatamento em Números</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="bg-green-50 p-6 rounded-xl text-center shadow-md hover:shadow-lg transition">
+                <div class="text-green-600 text-4xl mb-4"><i class="fas fa-chart-line"></i></div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">+30%</h3>
+                <p class="text-gray-600">Aumento no desmatamento na última década</p>
+            </div>
+            <div class="bg-green-50 p-6 rounded-xl text-center shadow-md hover:shadow-lg transition">
+                <div class="text-green-600 text-4xl mb-4"><i class="fas fa-fire"></i></div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">1.5 mi ha</h3>
+                <p class="text-gray-600">Área queimada anualmente no Brasil</p>
+            </div>
+            <div class="bg-green-50 p-6 rounded-xl text-center shadow-md hover:shadow-lg transition">
+                <div class="text-green-600 text-4xl mb-4"><i class="fas fa-exclamation-triangle"></i></div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">1.173</h3>
+                <p class="text-gray-600">Espécies animais ameaçadas de extinção</p>
+            </div>
+            <div class="bg-green-50 p-6 rounded-xl text-center shadow-md hover:shadow-lg transition">
+                <div class="text-green-600 text-4xl mb-4"><i class="fas fa-map-marked-alt"></i></div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">6 biomas</h3>
+                <p class="text-gray-600">Biomas brasileiros afetados pelo desmatamento</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mapa do Desmatamento -->
+<section id="mapa" class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Mapa do Desmatamento no Brasil</h2>
+        <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+            Explore nosso mapa interativo para ver as áreas mais afetadas pelo desmatamento.
+        </p>
+        <div class="bg-white p-4 rounded-xl shadow-lg">
+
+            <!-- Mini Mapa em 3d -->
+            <div class="text-center">
+                <div id="mapPreview" style="height:700px;width:700px;margin:auto;border-radius:50%;overflow:hidden;"></div> <!--Aumenta e diminui o tamanho do Globo-->
+
+                <a asp-controller="Mapa" asp-action="Index"
+                   class="inline-block mt-4 bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition">
+                    Ver mapa completo
+                </a>
+            </div>
+
+            <link href="https://unpkg.com/maplibre-gl/dist/maplibre-gl.css" rel="stylesheet" />
+            <script src="https://unpkg.com/maplibre-gl/dist/maplibre-gl.js"></script>
+
+            <script>
+                const map = new maplibregl.Map({
+                  container: 'mapPreview',
+                  style: 'https://demotiles.maplibre.org/globe.json',
+                  center: [-52.8, -14.2],
+                  zoom: 3.5
+                });
+
+                map.on('load', () => {
+                  map.addSource('desmatamento', {
+                    type: 'geojson',
+                    data: '/meuarquivo4.json'
+                  });
+
+                  // camada de extrusão 3D (bem visível)
+                  map.addLayer({
+                    id: 'areas-desmatadas-extrusao',
+                    type: 'fill-extrusion',
+                    source: 'desmatamento',
+                    paint: {
+                      'fill-extrusion-color': '#ff4d4d',
+                      'fill-extrusion-opacity': 0.85,
+                      'fill-extrusion-height': 500000   // altura das colunas
+                    }
+                  });
+
+                  // contorno forte vermelho
+                  map.addLayer({
+                    id: 'areas-desmatadas-borda',
+                    type: 'line',
+                    source: 'desmatamento',
+                    paint: {
+                      'line-color': '#cc0000',
+                      'line-width': 5.5
+                    }
+                  });
+
+                  // popup com informações
+                  map.on('click', 'areas-desmatadas-extrusao', (e) => {
+                    const props = e.features[0].properties;
+                    const info = Object.entries(props)
+                      .map(([k, v]) => `<b>${k}</b>: ${v}`)
+                      .join('<br>');
+                    new maplibregl.Popup()
+                      .setLngLat(e.lngLat)
+                      .setHTML(info)
+                      .addTo(map);
+                  });
+                });
+            </script>
+
+            <!-- métricas -->
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                    <h4 class="font-bold text-gray-800 mb-2">Região Norte</h4>
+                    <div class="h-2 bg-gray-200 rounded-full mb-2">
+                        <div class="h-2 bg-red-600 rounded-full" style="width: 78%"></div>
+                    </div>
+                    <p class="text-sm text-gray-600">78% da área desmatada</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                    <h4 class="font-bold text-gray-800 mb-2">Centro-Oeste</h4>
+                    <div class="h-2 bg-gray-200 rounded-full mb-2">
+                        <div class="h-2 bg-yellow-500 rounded-full" style="width: 45%"></div>
+                    </div>
+                    <p class="text-sm text-gray-600">45% da área desmatada</p>
+                </div>
+                <div class="bg-white p-4 rounded-lg border border-gray-200 shadow-sm">
+                    <h4 class="font-bold text-gray-800 mb-2">Outras Regiões</h4>
+                    <div class="h-2 bg-gray-200 rounded-full mb-2">
+                        <div class="h-2 bg-blue-500 rounded-full" style="width: 32%"></div>
+                    </div>
+                    <p class="text-sm text-gray-600">32% da área desmatada</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Espécies Ameaçadas -->
+<section id="animais" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Espécies Ameaçadas pelo Desmatamento</h2>
+        <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+            Conheça algumas das espécies que estão perdendo seu habitat natural.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="animal-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                <div class="h-48 bg-green-100 flex items-center justify-center">
+                    <img src="https://static.biologianet.com/2020/05/onca-pintada.jpg" alt="Onça-pintada" class="h-full w-full object-cover">
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">Onça-pintada</h3>
+                        <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">Criticamente ameaçada</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Perdeu 50% de seu habitat na Mata Atlântica nos últimos 15 anos.</p>
+                    <div class="flex justify-between text-sm text-gray-500">
+                        <span><i class="fas fa-map-marker-alt mr-1"></i> Mata Atlântica</span>
+                        <span><i class="fas fa-chart-line mr-1"></i> -60% população</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="animal-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                <div class="h-48 bg-green-100 flex items-center justify-center">
+                    <img src="https://imagens.ebc.com.br/7mrmO9tFuEk0CPiJHKLEqTCk9R4=/1170x700/smart/https://agenciabrasil.ebc.com.br/sites/default/files/thumbnails/image/2024/09/18/arara-azul-de-lear_01_0.jpg?itok=wDa3CBCI" alt="Arara-azul" class="h-full w-full object-cover">
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">Arara-azul</h3>
+                        <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded">Em perigo</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Apenas 6.500 indivíduos restantes devido à perda de habitat no Pantanal.</p>
+                    <div class="flex justify-between text-sm text-gray-500">
+                        <span><i class="fas fa-map-marker-alt mr-1"></i> Pantanal</span>
+                        <span><i class="fas fa-chart-line mr-1"></i> -40% população</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="animal-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                <div class="h-48 bg-green-100 flex items-center justify-center">
+                    <img src="https://static.todamateria.com.br/upload/mi/co/micoleao-cke.jpg" alt="Mico-leão-dourado" class="h-full w-full object-cover">
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">Mico-leão-dourado</h3>
+                        <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">Criticamente ameaçada</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Restam apenas 2.500 indivíduos na natureza devido ao desmatamento.</p>
+                    <div class="flex justify-between text-sm text-gray-500">
+                        <span><i class="fas fa-map-marker-alt mr-1"></i> Mata Atlântica</span>
+                        <span><i class="fas fa-chart-line mr-1"></i> -70% população</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="animal-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                <div class="h-48 bg-green-100 flex items-center justify-center">
+                    <img src="https://s3.static.brasilescola.uol.com.br/be/2020/08/lobo-guara.jpg" alt="Lobo-guará" class="h-full w-full object-cover">
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">Lobo-guará</h3>
+                        <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded">Vulnerável</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Perdeu 30% de seu habitat no Cerrado nos últimos 20 anos.</p>
+                    <div class="flex justify-between text-sm text-gray-500">
+                        <span><i class="fas fa-map-marker-alt mr-1"></i> Cerrado</span>
+                        <span><i class="fas fa-chart-line mr-1"></i> -35% população</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="animal-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                <div class="h-48 bg-green-100 flex items-center justify-center">
+                    <img src="https://www.parquedasaves.com.br/wp-content/uploads/2019/08/large-6.jpg" alt="Tucano" class="h-full w-full object-cover">
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">Tucano-de-bico-preto</h3>
+                        <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded">Em perigo</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">População em declínio devido à fragmentação florestal.</p>
+                    <div class="flex justify-between text-sm text-gray-500">
+                        <span><i class="fas fa-map-marker-alt mr-1"></i> Amazônia</span>
+                        <span><i class="fas fa-chart-line mr-1"></i> -25% população</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="animal-card bg-white rounded-xl overflow-hidden shadow-md transition duration-300">
+                <div class="h-48 bg-green-100 flex items-center justify-center">
+                    <img src="https://portal.pcs.ifsuldeminas.edu.br/images/campus_pocos_caldas/noticias/2020/junho/20200630/perereca-folhagem/figura_1.jpg" alt="Perereca" class="h-full w-full object-cover">
+                </div>
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold text-gray-800">Perereca-verde-da-mata</h3>
+                        <span class="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded">Criticamente ameaçada</span>
+                    </div>
+                    <p class="text-gray-600 mb-4">Endêmica de pequenas áreas ameaçadas pelo desmatamento.</p>
+                    <div class="flex justify-between text-sm text-gray-500">
+                        <span><i class="fas fa-map-marker-alt mr-1"></i> Mata Atlântica</span>
+                        <span><i class="fas fa-chart-line mr-1"></i> -80% população</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-12">
+            <a href="#" class="inline-block bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition">
+                <i class="fas fa-book mr-2"></i> Ver Lista Completa de Espécies Ameaçadas
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Evolução do Desmatamento -->
+<section id="dados" class="py-16 bg-gray-100">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Evolução do Desmatamento no Brasil</h2>
+        <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+            Veja como o desmatamento tem evoluído ao longo dos anos em diferentes biomas brasileiros.
+        </p>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Área Desmatada por Bioma</h3>
+
+                <div class="h-100 bg-gray-100 rounded-lg p-6">
+                    <div id="bioma-chart" class="w-full mx-auto">
+                        <div class="chart-rows space-y-4">
+                            <div class="chart-row flex items-center">
+                                <div class="label w-36 text-left pr-4 text-green-800 font-semibold">Amazônia</div>
+                                <div class="bar-track flex-1 h-12 bg-white rounded-md relative overflow-hidden">
+                                    <div class="bar-fill bg-emerald-800 h-full rounded-md" data-value="780" style="width:0"></div>
+                                    <div class="bar-value absolute top-1/2 transform -translate-y-1/2 text-sm font-semibold opacity-0"></div>
+                                </div>
+                            </div>
+
+                            <div class="chart-row flex items-center">
+                                <div class="label w-36 text-left pr-4 text-green-800 font-semibold">Cerrado</div>
+                                <div class="bar-track flex-1 h-12 bg-white rounded-md relative overflow-hidden">
+                                    <div class="bar-fill bg-emerald-800 h-full rounded-md" data-value="520" style="width:0"></div>
+                                    <div class="bar-value absolute top-1/2 transform -translate-y-1/2 text-sm font-semibold opacity-0"></div>
+                                </div>
+                            </div>
+
+                            <div class="chart-row flex items-center">
+                                <div class="label w-36 text-left pr-4 text-green-800 font-semibold">Mata Atlântica</div>
+                                <div class="bar-track flex-1 h-12 bg-white rounded-md relative overflow-hidden">
+                                    <div class="bar-fill bg-emerald-800 h-full rounded-md" data-value="320" style="width:0"></div>
+                                    <div class="bar-value absolute top-1/2 transform -translate-y-1/2 text-sm font-semibold opacity-0"></div>
+                                </div>
+                            </div>
+
+                            <div class="chart-row flex items-center">
+                                <div class="label w-36 text-left pr-4 text-green-800 font-semibold">Caatinga</div>
+                                <div class="bar-track flex-1 h-12 bg-white rounded-md relative overflow-hidden">
+                                    <div class="bar-fill bg-emerald-800 h-full rounded-md" data-value="150" style="width:0"></div>
+                                    <div class="bar-value absolute top-1/2 transform -translate-y-1/2 text-sm font-semibold opacity-0"></div>
+                                </div>
+                            </div>
+
+                            <div class="chart-row flex items-center">
+                                <div class="label w-36 text-left pr-4 text-green-800 font-semibold">Pampa</div>
+                                <div class="bar-track flex-1 h-12 bg-white rounded-md relative overflow-hidden">
+                                    <div class="bar-fill bg-emerald-800 h-full rounded-md" data-value="60" style="width:0"></div>
+                                    <div class="bar-value absolute top-1/2 transform -translate-y-1/2 text-sm font-semibold opacity-0"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chart-footer mt-6 flex items-center justify-between text-sm text-green-800 font-semibold">
+                            <div class="chart-scale flex-1 text-left">0</div>
+                            <div class="chart-scale flex-1 text-center">200</div>
+                            <div class="chart-scale flex-1 text-center">400</div>
+                            <div class="chart-scale flex-1 text-center">600</div>
+                            <div class="chart-scale flex-1 text-right">mil km²</div>
+                        </div>
+
+                        <!-- donut + linha -->
+                        <div class="bioma-pie-container mt-6">
+                            <h4 class="text-lg font-semibold text-gray-700 mb-3">Distribuição por Bioma</h4>
+
+                            <div class="flex flex-col md:flex-row items-center gap-6">
+                                <div id="bioma-pie" class="pie w-64 md:w-80" aria-hidden="true"></div>
+
+                                <ul id="bioma-pie-legend" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm w-full md:w-auto"></ul>
+                            </div>
+
+                            <!-- line chart placeholder (será gerado por JS) -->
+                            <div id="bioma-line" class="bioma-line mt-6 w-full"></div>
+                           
+                            <div id="bioma-radar" class="bioma-radar mt-6 w-full">
+                                <h4 class="text-lg font-semibold text-gray-700 mb-3">Radar Comparativo por Bioma</h4>
+                                <div class="flex items-center justify-center">
+                                    <div id="bioma-radar-chart" class="radar w-64 md:w-80" aria-hidden="true"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Linha do Tempo do Desmatamento</h3>
+
+                <div class="timeline-modern max-w-5xl mx-auto">
+                    <div class="timeline-modern-item">
+                        <div class="dot" aria-hidden="true"></div>
+                        <div class="content">
+                            <div class="text-sm text-green-700 font-semibold">2005</div>
+                            <h4 class="font-bold text-gray-800 mt-1">Pampa sofre impactos crescentes</h4>
+                            <p class="text-gray-600 mt-2">Pampa sofre impactos crescentes da expansão agropecuária</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-modern-item">
+                        <div class="dot" aria-hidden="true"></div>
+                        <div class="content">
+                            <div class="text-sm text-green-700 font-semibold">2010</div>
+                            <h4 class="font-bold text-gray-800 mt-1">Caatinga afetada</h4>
+                            <p class="text-gray-600 mt-2">Caatinga tem 45% de sua área original desmatada</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-modern-item">
+                        <div class="dot" aria-hidden="true"></div>
+                        <div class="content">
+                            <div class="text-sm text-green-700 font-semibold">2013</div>
+                            <h4 class="font-bold text-gray-800 mt-1">Novo Código Florestal</h4>
+                            <p class="text-gray-600 mt-2">Brasil aprova novo Código Florestal com impacto nos biomas</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-modern-item">
+                        <div class="dot" aria-hidden="true"></div>
+                        <div class="content">
+                            <div class="text-sm text-green-700 font-semibold">2015</div>
+                            <h4 class="font-bold text-gray-800 mt-1">Queimadas no Pantanal</h4>
+                            <p class="text-gray-600 mt-2">Pantanal perde 12% de sua área para queimadas</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-modern-item">
+                        <div class="dot" aria-hidden="true"></div>
+                        <div class="content">
+                            <div class="text-sm text-green-700 font-semibold">2018</div>
+                            <h4 class="font-bold text-gray-800 mt-1">Mata Atlântica reduzida</h4>
+                            <p class="text-gray-600 mt-2">Mata Atlântica tem apenas 12,4% de sua cobertura original</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-modern-item">
+                        <div class="dot" aria-hidden="true"></div>
+                        <div class="content">
+                            <div class="text-sm text-green-700 font-semibold">2020</div>
+                            <h4 class="font-bold text-gray-800 mt-1">Perdas no Cerrado</h4>
+                            <p class="text-gray-600 mt-2">Cerrado perde 7.340 km² de vegetação nativa</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-modern-item">
+                        <div class="dot" aria-hidden="true"></div>
+                        <div class="content">
+                            <div class="text-sm text-green-700 font-semibold">2022</div>
+                            <h4 class="font-bold text-gray-800 mt-1">Seca no Pantanal</h4>
+                            <p class="text-gray-600 mt-2">Pantanal enfrenta pior seca em décadas</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-modern-item">
+                        <div class="dot" aria-hidden="true"></div>
+                        <div class="content">
+                            <div class="text-sm text-green-700 font-semibold">2023</div>
+                            <h4 class="font-bold text-gray-800 mt-1">Recorde de desmatamento</h4>
+                            <p class="text-gray-600 mt-2">Recorde de desmatamento na Amazônia: 11,568 km²</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>    </div>
+</section>
+
+<section>
+<div class="mt-12 bg-white p-6 rounded-xl shadow-md">
+    <h3 class="text-xl font-bold text-gray-800 mb-4">Comparação Regional</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+            <h4 class="font-semibold text-gray-700 mb-2">Norte (Amazônia)</h4>
+            <div class="h-4 bg-gray-200 rounded-full mb-2">
+                <div class="h-4 bg-green-800 rounded-full" style="width: 78%"></div>
+            </div>
+            <p class="text-sm text-gray-600">78% de área desmatada</p>
+        </div>
+        <div>
+            <h4 class="font-semibold text-gray-700 mb-2">Centro-Oeste (Cerrado/Pantanal)</h4>
+            <div class="h-4 bg-gray-200 rounded-full mb-2">
+                <div class="h-4 bg-yellow-600 rounded-full" style="width: 45%"></div>
+            </div>
+            <p class="text-sm text-gray-600">45% da área desmatada</p>
+        </div>
+        <div>
+            <h4 class="font-semibold text-gray-700 mb-2">Nordeste (Caatinga)</h4>
+            <div class="h-4 bg-gray-200 rounded-full mb-2">
+                <div class="h-4 bg-orange-500 rounded-full" style="width: 15%"></div>
+            </div>
+            <p class="text-sm text-gray-600">15% da área desmatada</p>
+        </div>
+        <div>
+            <h4 class="font-semibold text-gray-700 mb-2">Sudeste/Sul (Mata Atlântica/Pampa)</h4>
+            <div class="h-4 bg-gray-200 rounded-full mb-2">
+                <div class="h-4 bg-blue-600 rounded-full" style="width: 32%"></div>
+            </div>
+            <p class="text-sm text-gray-600">32% da área desmatada</p>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- Soluções -->
+<section id="solucoes" class="py-16 bg-green-700 text-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-6">O que podemos fazer?</h2>
+        <p class="text-center max-w-2xl mx-auto mb-12 text-green-100">
+            Ações individuais e coletivas que podem ajudar a combater o desmatamento.
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm border border-white border-opacity-20">
+                <div class="text-4xl mb-4 text-green-200">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Consumo Consciente</h3>
+                <p class="text-green-100">
+                    Evite produtos que contribuem para o desmatamento, como carne de origem duvidosa, madeira ilegal e óleo de palma não sustentável.
+                </p>
+            </div>
+
+            <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm border border-white border-opacity-20">
+                <div class="text-4xl mb-4 text-green-200">
+                    <i class="fas fa-hands-helping"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Apoie Organizações</h3>
+                <p class="text-green-100">
+                    Contribua com instituições que trabalham para preservar os biomas brasileiros e combater o desmatamento ilegal.
+                </p>
+            </div>
+
+            <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm border border-white border-opacity-20">
+                <div class="text-4xl mb-4 text-green-200">
+                    <i class="fas fa-vote-yea"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Engajamento Político</h3>
+                <p class="text-green-100">
+                    Apoie políticas públicas e candidatos comprometidos com a preservação ambiental e o desenvolvimento sustentável.
+                </p>
+            </div>
+
+            <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm border border-white border-opacity-20">
+                <div class="text-4xl mb-4 text-green-200">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Reflorestamento</h3>
+                <p class="text-green-100">
+                    Participe de iniciativas de plantio de árvores nativas e recuperação de áreas degradadas em sua região.
+                </p>
+            </div>
+
+            <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm border border-white border-opacity-20">
+                <div class="text-4xl mb-4 text-green-200">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Educação Ambiental</h3>
+                <p class="text-green-100">
+                    Divulgue informações sobre a importância da preservação e os impactos do desmatamento em sua comunidade.
+                </p>
+            </div>
+
+            <div class="bg-white bg-opacity-10 p-6 rounded-xl backdrop-blur-sm border border-white border-opacity-20">
+                <div class="text-4xl mb-4 text-green-200">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Denuncie</h3>
+                <p class="text-green-100">
+                    Use aplicativos como "Denúncia Ambiente" para reportar atividades ilegais de desmatamento que você identificar.
+                </p>
+            </div>
+        </div>
+        <div class="mt-12 bg-white bg-opacity-20 p-6 rounded-xl backdrop-blur-sm border border-white border-opacity-30">
+            <h3 class="text-2xl font-bold mb-4 text-center">Faça parte da mudança, deixe seu Feedback</h3>
+            <p class="text-center max-w-3xl mx-auto mb-6 text-green-100">
+                Cadastre-se para poder nos enviar seu Feedback, oportunidades de voluntariado e ações que você pode tomar para proteger nossos biomas.
+            </p>
+            <div class="max-w-md mx-auto">
+                <form class="flex flex-col sm:flex-row gap-2 justify-center">
+                    <button asp-controller="Avaliacao" asp-action="Index"
+                            class="hover:text-green-200 transition">
+                        Avaliações
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Equipe -->
+<section id="equipe" class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-6 text-gray-800">Nossa Equipe</h2>
+        <p class="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+            Conheça o time por trás deste projeto.
+        </p>
+
+        <!-- Primeira linha: 3 cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-items-center">
+            <!-- Vinicius -->
+            <div class="bg-gray-50 p-8 rounded-2xl text-center shadow-md hover:shadow-lg transition max-w-sm w-full">
+                <div class="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden">
+                    
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Vinicius</h3>
+                <div class="flex justify-center space-x-3">
+                    <a href="#" class="text-gray-500 hover:text-green-600"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-green-600"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+
+            <!-- Bruno -->
+            <div class="bg-gray-50 p-8 rounded-2xl text-center shadow-md hover:shadow-lg transition max-w-sm w-full">
+                <div class="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden">
+                    
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Bruno</h3>
+                <div class="flex justify-center space-x-3">
+                    <a href="#" class="text-gray-500 hover:text-green-600"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-green-600"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+
+            <!-- Cesar -->
+            <div class="bg-gray-50 p-8 rounded-2xl text-center shadow-md hover:shadow-lg transition max-w-sm w-full">
+                <div class="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden">
+                    
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Cesar</h3>
+                <div class="flex justify-center space-x-3">
+                    <a href="#" class="text-gray-500 hover:text-green-600"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-green-600"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Segunda linha: 2 cards centralizados -->
+        <div class="flex justify-center gap-8 mt-10 flex-wrap">
+            <!-- João Flávio -->
+            <div class="bg-gray-50 p-8 rounded-2xl text-center shadow-md hover:shadow-lg transition max-w-sm w-full">
+                <div class="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden">
+                    
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">João Flávio</h3>
+                <div class="flex justify-center space-x-3">
+                    <a href="#" class="text-gray-500 hover:text-green-600"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-green-600"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+
+            <!-- Victor -->
+            <div class="bg-gray-50 p-8 rounded-2xl text-center shadow-md hover:shadow-lg transition max-w-sm w-full">
+                <div class="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden">
+                    
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Victor</h3>
+                <div class="flex justify-center space-x-3">
+                    <a href="#" class="text-gray-500 hover:text-green-600"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="text-gray-500 hover:text-green-600"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<!-- chamada à ação -->
+<section class="py-16 bg-green-800 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Juntos podemos fazer a Diferença</h2>
+        <p class="text-xl mb-8 max-w-3xl mx-auto">
+            O desmatamento é um problema de todos nós. Compartilhe esta página.
+        </p>
+        <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="#" class="bg-white text-green-800 font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition">
+                <i class="fas fa-share-alt mr-2"></i> Compartilhar
+            </a>
+            <a href="dashboard_alerts-shapefile.zip" class="bg-transparent border-2 border-white text-white font-bold py-3 px-6 rounded-lg hover:bg-white hover:text-green-800 transition">
+                <i class="fas fa-download mr-2"></i> Baixar Dados
+            </a>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-gray-900 text-gray-400 py-12">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4">EcoMapBrasil</h3>
+                <p class="mb-4">Nosso objetivo é educar e conscientizar sobre os impactos do desmatamento na biodiversidade brasileira.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4">Links Úteis</h3>
+                <ul class="space-y-2">
+                    <li><a href="mapa.html" class="hover:text-white transition">Mapa Interativo</a></li>
+                    <li><a href="#animais" class="hover:text-white transition">Espécies Ameaçadas</a></li>
+                    <li><a href="#dados" class="hover:text-white transition">Dados e Estatísticas</a></li>
+                    <li><a href="#solucoes" class="hover:text-white transition">Como Ajudar</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4">Recursos</h3>
+                <ul class="space-y-2">
+                    <li><a href="https://alerta.mapbiomas.org/relatorio/" class="hover:text-white transition">Relatórios Anuais</a></li>
+                    <li><a href="https://g1.globo.com/busca/?q=desmatamento" class="hover:text-white transition">Artigos</a></li>
+                    <li><a href="https://www.ibflorestas.org.br/conteudo/leis-ambientais" class="hover:text-white transition">Legislação Ambiental</a></li>
+                    <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4">Contato</h3>
+                <ul class="space-y-2">
+                    <li class="flex items-center">
+                        <i class="fas fa-envelope mr-2"></i> exemplo@email.com
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-phone-alt mr-2"></i> (xx) xxxxx-xxxx
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-map-marker-alt mr-2"></i> Matão, São Paulo, Brasil
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+            <p>&copy; 2025 Brasil em Alerta. Todos os direitos reservados.</p>
+            <p class="mt-2 text-sm">Desenvolvido com <i class="fas fa-heart text-red-500"></i> pela equipe do projeto Vida Terrestre.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+@section Scripts {
+    <script>
+        const backToTopButton = document.getElementById('backToTop');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('hidden');
+            } else {
+                backToTopButton.classList.add('hidden');
+            }
+        });
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // scroll suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+
+    <script>
+    (function () {
+        const slidesContainer = document.querySelector('.slides');
+        if (!slidesContainer) return;
+
+        const slides = Array.from(slidesContainer.querySelectorAll('.slide'));
+        if (slides.length === 0) return;
+
+        let current = 0;
+        const intervalMs = 5000;
+        let timer = null;
+        let isPaused = false;
+
+        // Inicializa estado
+        function showSlide(index) {
+            slides.forEach((s, i) => {
+                s.classList.toggle('active', i === index);
+            });
+            updateDots(index);
+            current = index;
+        }
+
+        // Autoplay
+        function start() {
+            timer = setInterval(() => {
+                if (isPaused) return;
+                const nextIndex = (current + 1) % slides.length;
+                showSlide(nextIndex);
+            }, intervalMs);
+        }
+
+        function pause() { isPaused = true; }
+        function resume() { isPaused = false; }
+
+        function restart() {
+            clearInterval(timer);
+            isPaused = false;
+            start();
+        }
+
+        // Pausa ao passar o mouse e em telas touch ao pressionar
+        slidesContainer.addEventListener('mouseenter', pause);
+        slidesContainer.addEventListener('mouseleave', resume);
+        slidesContainer.addEventListener('touchstart', () => pause(), { passive: true });
+        slidesContainer.addEventListener('touchend', () => resume(), { passive: true });
+
+        // Inicializa primeira exibição e autoplay
+        showSlide(0);
+        start();
+
+        // Expõe funções para debug no console (opcional)
+        window.__ecoSlideshow = { showSlide, pause, resume, restart };
+    })();
+    </script>
+
+    <script>
+        (function () {
+            const container = document.getElementById('bioma-chart');
+            if (!container) return;
+
+            const rows = Array.from(container.querySelectorAll('.chart-row'));
+            if (rows.length === 0) return;
+
+            const fills = rows.map(r => r.querySelector('.bar-fill'));
+            const values = fills.map(f => Number(f.dataset.value || 0));
+            const max = Math.max(...values, 1);
+
+            function placeLabel(trackEl, fillEl, labelEl, pct) {
+                const trackRect = trackEl.getBoundingClientRect();
+                const trackWidth = Math.max(trackRect.width, 1);
+                // calc fill width in px
+                const fillPx = Math.round((pct / 100) * trackWidth);
+                // text width
+                labelEl.style.left = '0px';
+                labelEl.style.opacity = '0';
+                labelEl.style.color = '#064e3b';
+                const textWidth = Math.ceil(labelEl.getBoundingClientRect().width);
+
+                // margin from edge
+                const margin = 8;
+
+                if (fillPx >= textWidth + 24) {
+                    // cabe dentro da barra: posicionar alinhado à direita dentro do preenchimento
+                    let leftPx = Math.max(fillPx - textWidth - margin, 6);
+                    // impedir que o texto ultrapasse o início do track
+                    leftPx = Math.max(leftPx, 6);
+                    labelEl.style.left = leftPx + 'px';
+                    labelEl.style.color = '#ffffff';
+                } else {
+                    // posicionar fora, logo à direita do preenchimento
+                    let leftPx = fillPx + margin;
+                    // evitar que ultrapasse o final do track (fica dentro do container porque track tem padding-right)
+                    leftPx = Math.min(leftPx, trackWidth - textWidth - 6);
+                    labelEl.style.left = leftPx + 'px';
+                    labelEl.style.color = '#064e3b';
+                }
+                // tornar visível
+                labelEl.style.opacity = '1';
+            }
+
+            function animateOnce() {
+                fills.forEach((el, i) => {
+                    const value = Number(el.dataset.value || 0);
+                    const pct = Math.min(Math.max((value / max) * 100, 0), 100);
+
+                    const track = el.parentElement;
+                    const label = track.querySelector('.bar-value');
+
+                    setTimeout(() => {
+                        el.style.transition = 'width 900ms cubic-bezier(.2,.8,.2,1)';
+                        el.style.width = pct + '%';
+
+                        // garantir repaint antes de medir e posicionar
+                        requestAnimationFrame(() => {
+                            // definir texto (antes de medir)
+                            if (label) label.textContent = value + ' mil';
+                            // posicionar usando pixels
+                            placeLabel(track, el, label, pct);
+                        });
+                    }, i * 140);
+                });
+            }
+
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateOnce();
+                        obs.disconnect();
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            observer.observe(container);
+        })();
+    </script>
+
+    <script src="~/js/timeline.js" asp-append-version="true"></script>
+    <script src="~/js/bioma-pie.js" asp-append-version="true"></script>
+}
+

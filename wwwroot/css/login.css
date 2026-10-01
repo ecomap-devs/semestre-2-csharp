@@ -1,0 +1,112 @@
+﻿body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(180deg, #e8f5e9 0%, #f1f8e9 100%);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* ---------- CONTAINER DO FORM ---------- */
+form {
+    background: #fff;
+    padding: 40px 45px;
+    border-radius: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+
+/* ---------- TÍTULO ---------- */
+h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: #2e7d32;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+/* ---------- LABELS E INPUTS ---------- */
+label {
+    font-weight: 600;
+    color: #1b5e20;
+    display: block;
+    margin-bottom: 8px;
+}
+
+input.form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #cfd8dc;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+    input.form-control:focus {
+        border-color: #43a047;
+        box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.2);
+        outline: none;
+    }
+
+/* ---------- BOTÕES ---------- */
+.btn {
+    padding: 12px;
+    font-size: 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #43a047;
+    color: #fff;
+}
+
+.btn-link {
+    text-align: center;
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* ---------- ALERTA DE ERRO ---------- */
+.alert-danger {
+    background-color: #ffcdd2;
+    color: #b71c1c;
+    border-radius: 10px;
+    padding: 10px 15px;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(183, 28, 28, 0.1);
+}
+
+/* ---------- RESPONSIVIDADE ---------- */
+@media (max-width: 480px) {
+    form {
+        padding: 25px;
+        width: 90%;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+    }
+
+    .login-logo img {
+        width: 42%;
+        max-width: 140px;
+        min-width: 90px;
+    }
+}

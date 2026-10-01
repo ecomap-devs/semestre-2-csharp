@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EcoMapBrasil</title>
+
+    <!-- Tailwind + Font Awesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- CSS custom -->
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="bg-gray-50 font-sans">
+
+    <!-- HEADER -->
+    <header class="bg-green-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="~/images/logo2.png" alt="EcoMapBrasil" class="h-12 w-auto" />
+                    <h1 class="text-2xl font-bold">EcoMapBrasil</h1>
+                </div>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8">
+                        <li><a href="#mapa" class="hover:text-green-200 transition">Mapa</a></li>
+                        <li><a href="#animais" class="hover:text-green-200 transition">Animais Ameaçados</a></li>
+                        <li><a href="#dados" class="hover:text-green-200 transition">Dados</a></li>
+                        <li><a href="#solucoes" class="hover:text-green-200 transition">Soluções</a></li>
+                        <li><a href="#equipe" class="hover:text-green-200 transition">Equipe</a></li>
+                        <li><a asp-controller="Login" asp-action="Index" class="hover:text-green-200 transition">Login</a></li>
+                        <li><a asp-controller="Avaliacao" asp-action="Index" class="hover:text-green-200 transition">Avaliações</a></li>
+                        <li><a asp-controller="Admin2" asp-action="Index" class="hover:text-green-200 transition">Usuários</a></li>
+                    </ul>
+                </nav>
+                <!-- menu mobile -->
+                <button class="md:hidden text-2xl">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- BODY -->
+    <main>
+        @RenderBody()
+    </main>
+
+   
+
+    <!-- botão voltar ao topo -->
+    <button id="backToTop" class="fixed bottom-8 right-8 bg-green-600 text-white w-12 h-12 rounded-full shadow-lg hover:bg-green-700 transition hidden">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="~/js/site.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

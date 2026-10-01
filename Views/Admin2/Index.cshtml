@@ -1,0 +1,43 @@
+﻿@model IEnumerable<EcoMapBrasil.Models.Usuario>
+
+
+@{
+    ViewBag.Title = "Usuários";
+}
+
+<h2>Gerenciamento de Usuários</h2>
+
+<a asp-controller="Home" asp-action="Index"
+   class="jorge"
+   title="Voltar à Página Inicial">
+    Voltar à Página Inicial
+</a>
+
+<a class="btn btn-success" href="/Admin2/Create">+ Adicionar Usuário</a>
+
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome de Usuário</th>
+            <th>Email</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.IdUsuario</td>
+                <td>@u.Nome</td>
+                <td>@u.Email</td>
+                <td>
+                    <a asp-controller="Admin2" asp-action="Edit" asp-route-id="@u.IdUsuario" class="btn btn-primary btn-sm">Editar</a>
+
+                    <a asp-controller="Admin2" asp-action="Delete" asp-route-id="@u.IdUsuario" class="btn btn-danger btn-sm">Excluir</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+<link rel="stylesheet" href="~/css/login.css" />
+
+<form asp-action="Entrar" method="post">
+    <h2>Entrar</h2>
+    <div class="mb-3">
+        <label>Email</label>
+        <input class="form-control" name="email" />
+    </div>
+    <div class="mb-3">
+        <label>Senha</label>
+        <input type="password" class="form-control" name="senha" />
+    </div>
+    <button class="btn btn-primary" type="submit">Entrar</button>
+    <a asp-action="Register" class="btn btn-link">Registrar-se</a>
+    <a asp-controller="Home" asp-action="Index"
+       class="btn btn-link"
+       title="Voltar à Página Inicial">
+        Voltar à Página Inicial
+    </a>
+</form>
+
+@if(ViewBag.Mensagem != null)
+{
+    <div class="alert alert-danger">@ViewBag.Mensagem</div>
+}

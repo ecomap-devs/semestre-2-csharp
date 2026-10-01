@@ -1,0 +1,34 @@
+@model IEnumerable<EcoMapBrasil.Models.Avaliacao>
+
+<h2>Painel Admin - Avaliações</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Usuário</th>
+            <th>Comentário</th>
+            <th>Nota</th>
+            <th>Data</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var a in Model)
+    {
+        <tr>
+            <td>@a.IdAvaliacao</td>
+            <td>@a.Usuario?.Nome</td>
+            <td>@a.Comentario</td>
+            <td>@a.Nota</td>
+            <td>@a.DataAvaliacao.ToLocalTime().ToString("g")</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@a.IdAvaliacao" class="btn btn-sm btn-secondary">Editar</a>
+                <form asp-action="Delete" method="post" style="display:inline">
+                    <input type="hidden" name="id" value="@a.IdAvaliacao" />
+                    <button type="submit" onclick="return confirm('Excluir?')" class="btn btn-sm btn-danger">Excluir</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

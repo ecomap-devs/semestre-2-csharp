@@ -1,0 +1,23 @@
+﻿@model EcoMapBrasil.Models.Usuario
+
+
+@{
+    ViewBag.Title = "Excluir Usuário";
+}
+
+<h2>Excluir Usuário</h2>
+
+<p>Tem certeza que deseja excluir o usuário abaixo?</p>
+
+<ul class="list-group">
+    <li class="list-group-item"><strong>ID:</strong> @Model.IdUsuario</li>
+    <li class="list-group-item"><strong>Usuário:</strong> @Model.Nome</li>
+    <li class="list-group-item"><strong>Email:</strong> @Model.Email</li>
+</ul>
+
+<form method="post" class="mt-3">
+    <input type="hidden" name="id" value="@Model.IdUsuario" />
+
+    <button class="btn btn-danger">Excluir</button>
+    <a href="/User" class="btn btn-secondary">Cancelar</a>
+</form>

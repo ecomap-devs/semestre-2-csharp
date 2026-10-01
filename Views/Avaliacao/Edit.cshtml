@@ -1,0 +1,36 @@
+@model EcoMapBrasil.Models.Avaliacao
+@{
+    ViewData["Title"] = "Editar Avaliação";
+    Layout = null;
+}
+<link rel="stylesheet" href="~/css/edit.css" />
+<h2>Editar Avaliação</h2>
+
+<form method="post" asp-action="Edit" asp-route-id="@Model.IdAvaliacao">
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label>Comentário</label>
+        <textarea name="comentario" class="form-control">@Model.Comentario</textarea>
+    </div>
+    <div class="form-group">
+        <label>Nota</label>
+        <input name="nota" value="@Model.Nota" type="number" min="1" max="5" class="form-control" />
+    </div>
+
+    <div class="botao-area d-flex" style="gap:8px;">
+        <!-- Botão Salvar: envia para Edit (asp-action do form) -->
+        <button type="submit" class="btn btn-success">Salvar</button>
+
+        <!-- Botão Excluir: sobrescreve a ação do form usando formaction -->
+        <button
+            type="submit"
+            class="btn btn-danger"
+            formaction="@Url.Action("Delete", "Avaliacao", new { id = Model.IdAvaliacao })"
+            formmethod="post"
+            onclick="return confirm('Tem certeza que deseja excluir esta avaliação?');">
+            Excluir
+        </button>
+    </div>
+</form>
+

@@ -1,0 +1,7 @@
+@model EcoMapBrasil.Models.Avaliacao
+<h2>Editar Avaliação (Admin)</h2>
+<form method="post" asp-action="Edit" asp-route-id="@Model.IdAvaliacao">
+    <div class="form-group"><label>Comentário</label><textarea name="comentario" class="form-control">@Model.Comentario</textarea></div>
+    <div class="form-group"><label>Nota</label><input name="nota" value="@Model.Nota" type="number" min="1" max="5" class="form-control" /></div>
+    <button type="submit" class="btn btn-success">Salvar</button>
+</form>

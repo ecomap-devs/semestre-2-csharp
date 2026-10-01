@@ -1,0 +1,394 @@
+.map-container {
+    position: relative;
+    min-height: 400px; /* ajuste conforme o original */
+}
+
+
+.animal-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 24px;
+    height: 100%;
+    width: 2px;
+    background: #4ade80;
+}
+
+/* Slideshow por camadas (fade entre slides) */
+.slideshow { position: relative; }
+.slides { position: relative; width: 100%; height: 100%; }
+
+/* cada slide ocupa toda a área e recebe background-image inline */
+.slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transform: scale(1.02);
+    animation: slideFade 16s linear infinite;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    z-index: 0;
+}
+
+/* defina delays para cada slide (4 slides -> cada um por 4s) */
+.slide:nth-child(1) { animation-delay: 0s; }
+.slide:nth-child(2) { animation-delay: 4s; }
+.slide:nth-child(3) { animation-delay: 8s; }
+.slide:nth-child(4) { animation-delay: 12s; }
+
+/* efeito de fade in/out */
+@keyframes slideFade {
+    0%   { opacity: 0; transform: scale(1.02); }
+    6%   { opacity: 1; transform: scale(1); }
+    24%  { opacity: 1; transform: scale(1); }
+    30%  { opacity: 0; transform: scale(0.98); }
+    100% { opacity: 0; transform: scale(0.98); }
+}
+
+/* degradê sobre as imagens para legibilidade do texto */
+.slideshow .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(6,78,59,0.78), rgba(52,211,153,0.14));
+    z-index: 5;
+}
+
+/* garante conteúdo acima do slideshow */
+.slideshow > .container { z-index: 10; position: relative; }
+
+/* conserva classe fade-in já existente */
+.fade-in { animation: fadeIn 1.2s ease-in-out; }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Slideshow - melhorias visuais e controles */
+.slideshow .slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+}
+
+/* Evitar corte das imagens em telas grandes:
+   - mobile/desktop pequeno: cover (preenche, mantém estética)
+   - telas largas (>=1024px): contain (mostra a imagem inteira sem cortar)
+*/
+.slideshow .slide {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover; /* padrão para dispositivos menores */
+}
+
+
+    /* Overaly com degradê leve (garante legibilidade do texto sobre a imagem) */
+    .slideshow .overlay {
+        background: linear-gradient(to right, rgba(6,78,59,0.78), rgba(52,211,153,0.14));
+    }
+
+/* Mantém transições e posicionamento */
+.slideshow .slide,
+.slideshow .slide.active {
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    background-position: center center;
+}
+
+/* Priorizar a metade superior das imagens do slideshow */
+.slideshow .slide {
+    background-position: 50% 15%; /* x% y% -> x = 50% (centro horizontal), y = 15% (mostrar mais do topo) */
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* Em telas pequenas manter centro para composição melhor em dispositivos móveis */
+@media (max-width: 1024px) {
+    .slideshow .slide {
+        background-position: center center;
+    }
+}
+
+/* Gráfico "Área Desmatada por Bioma" */
+#bioma-chart .label { min-width: 9rem; }
+/* estilos para o gráfico de barras */
+#bioma-chart .bar-track {
+    position: relative;
+    background-color: #f3f7f4; /* fundo suave para o trilho */
+    background-image: linear-gradient(to right, rgba(0,0,0,0.03) 1px, transparent 1px);
+    background-size: calc(100% / 5) 100%;
+    padding-right: 12px; /* espaço para rótulos pequenos fora da barra */
+    overflow: visible;
+}
+#bioma-chart .bar-fill {
+    width: 0;
+    height: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(6,78,59,0.08);
+    position: relative;
+    z-index: 1;
+}
+#bioma-chart .bar-value {
+    position: absolute;
+    z-index: 3;
+    white-space: nowrap;
+    pointer-events: none;
+    padding: 0 6px;
+    transition: left .9s cubic-bezier(.2,.8,.2,1), opacity .25s, color .15s;
+    font-size: .9rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* pequenas adaptações responsivas */
+@media (max-width: 640px) {
+    #bioma-chart .label { width: 7rem; font-size: 0.95rem; }
+    #bioma-chart .bar-track { height: 10px; padding-right: 8px; }
+    #bioma-chart .bar-value { font-size: .85rem; }
+}
+
+/* garante que o chart use toda a largura disponível e que os "tracks" fiquem maiores */
+#bioma-chart { width: 100%; max-width: 100%; }
+#bioma-chart .bar-track { min-height: 3rem; } /* sincronize com h-12 do Tailwind */
+#bioma-chart .bar-fill { transition: width .9s cubic-bezier(.2,.8,.2,1); }
+#bioma-chart .bar-value { position: absolute; white-space: nowrap; }
+
+
+/* timeline moderno: responsivo, alterna em telas grandes e anima ao entrar na viewport */
+.timeline-modern {
+    position: relative;
+    padding: 1.25rem 1rem;
+}
+.timeline-modern::before {
+    content: "";
+    position: absolute;
+    left: 2rem;
+    top: 0.75rem;
+    bottom: 0.75rem;
+    width: 4px;
+    background: rgba(6,78,59,0.06);
+    border-radius: 3px;
+}
+
+/* clearfix e espaço mínimo para a timeline (adicionar perto das regras .timeline-modern) */
+.timeline-modern {
+    position: relative;
+    z-index: 0;
+    overflow: visible; /* permitir que o SVG ultrapasse limites visuais */
+    min-height: 160px; /* garante espaço inicial para o conector */
+}
+
+/* clearfix para conter itens floatados em desktop */
+.timeline-modern::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* itens (mobile: linha à esquerda + conteúdo à direita) */
+.timeline-modern-item {
+    position: relative;
+    padding-left: 4.25rem;
+    margin-bottom: 1.6rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1);
+}
+.timeline-modern-item .dot {
+    position: absolute;
+    left: 1.6rem;
+    top: 0.9rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    background: #065f46;
+    border-radius: 9999px;
+    box-shadow: 0 6px 16px rgba(6,78,59,0.12);
+    border: 4px solid #ffffff;
+    z-index: 2;
+}
+.timeline-modern-item .content {
+    background: #ffffff;
+    padding: 0.9rem 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 6px 18px rgba(6,78,59,0.04);
+}
+
+/* quando o item entra em view */
+.timeline-modern-item.in-view {
+    opacity: 1;
+    transform: none;
+}
+
+/* desktop: linha central e itens alternados */
+@media (min-width: 1024px) {
+    .timeline-modern {
+        padding: 2rem 0;
+    }
+    .timeline-modern::before {
+        left: 50%;
+        transform: translateX(-50%);
+        width: 6px;
+    }
+    .timeline-modern-item {
+        width: calc(50% - 3rem);
+        padding-left: 0;
+        margin-bottom: 2.5rem;
+    }
+    .timeline-modern-item:nth-child(odd) {
+        float: left;
+        clear: both;
+    }
+    .timeline-modern-item:nth-child(even) {
+        float: right;
+        clear: both;
+    }
+    .timeline-modern-item:nth-child(odd) .content {
+        margin-right: 3rem;
+        text-align: right;
+    }
+    .timeline-modern-item:nth-child(even) .content {
+        margin-left: 3rem;
+        text-align: left;
+    }
+    .timeline-modern-item .dot {
+        left: calc(50% - 0.625rem); /* centro da linha */
+    }
+}
+
+/* pequenos ajustes para telas muito pequenas */
+@media (max-width: 420px) {
+    .timeline-modern::before { left: 1.4rem; }
+    .timeline-modern-item { padding-left: 3.6rem; }
+    .timeline-modern-item .dot { left: 1.1rem; width: 1rem; height: 1rem; }
+}
+
+/* estilos do conector SVG */
+.timeline-modern { position: relative; z-index: 0; }
+
+/* SVG fica atrás dos conteúdos (.dot tem z-index maior) */
+.timeline-connector { z-index: 1; position: absolute; top: 0; left: 0; }
+.timeline-connector-path { z-index: 0; } /* abaixo da frente do item */
+    
+/* estado base e animação */
+.timeline-connector-path {
+    opacity: 0;
+    transition: stroke-dashoffset .9s ease, opacity .45s ease;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* fundo suave (glow) */
+.timeline-connector-bg {
+    mix-blend-mode: normal;
+    filter: blur(6px);
+    opacity: 0.6;
+}
+
+/* traço frontal mais nítido */
+.timeline-connector-front {
+    /* cor por JS, mas garantir fallback */
+    stroke: rgba(6,95,70,0.36);
+}
+
+/* garantir pontos sempre acima do conector */
+.timeline-modern-item .dot {
+    z-index: 3; /* acima do svg */
+    position: absolute;
+}
+
+/* ajustes responsivos: reduzir espessura em telas pequenas */
+@media (max-width: 640px) {
+    .timeline-connector-bg { filter: blur(4px); opacity: 0.55; }
+    .timeline-connector-path { transition-duration: .8s; }
+}
+
+/* em telas grandes manter conector sutil */
+@media (min-width: 1024px) {
+    .timeline-connector-path { stroke-width: 8 !important; }
+}
+
+/* estilos para o gráfico em pizza (donut) e legenda */
+.pie {
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 1 / 1;
+    border-radius: 9999px;
+    background: conic-gradient(#eee 0deg 360deg); /* fallback; será sobrescrito pelo JS */
+    box-shadow: 0 8px 20px rgba(6,78,59,0.06);
+    position: relative;
+    margin: 0 auto;
+    transform: scale(.98);
+    opacity: 0;
+    transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease;
+}
+
+/* fallback: garantir área mínima e visibilidade do donut */
+.pie { min-height: 180px; max-width: 320px; }
+.pie.in-view { opacity: 1 !important; transform: scale(1) !important; }
+
+/* cria o "buraco" do donut */
+.pie::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 56%;
+    height: 56%;
+    background: #f8faf7; /* cor do fundo interno */
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(6,78,59,0.03) inset;
+}
+
+/* quando visível, anima para o estado final */
+.pie.in-view { transform: scale(1); opacity: 1; }
+
+/* legenda: swatch + texto + valor alinhado à direita */
+#bioma-pie-legend li { display:flex; align-items:center; gap:.6rem; }
+#bioma-pie-legend .swatch {
+    width:14px; height:14px; border-radius:4px; flex-shrink:0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06) inset;
+}
+#bioma-pie-legend .value { margin-left:auto; font-weight:600; color:#065f46; }
+
+/* responsividade */
+@media (max-width: 640px) {
+    .pie { max-width: 220px; }
+}
+
+/* bioma line chart styles */
+.bioma-line { max-width: 860px; margin: 0 auto; padding: 6px 0; }
+.bioma-line-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.bioma-line-path { opacity: 0.98; }
+.bioma-line-svg .bioma-point { transition: transform .3s ease, opacity .3s ease; }
+.bioma-line-svg text { font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; font-weight: 600; }
+
+/* ajustar labels para telas pequenas */
+@media (max-width: 480px) {
+    .bioma-line-svg text { font-size: 10px; }
+    .bioma-line .pie { max-width: 220px; }
+}
+
+/* estilos básicos para o radar */
+.bioma-radar { max-width: 860px; margin: 0 auto; padding: 8px 0; }
+.radar { width: 100%; max-width: 320px; aspect-ratio: 1/1; margin: 0 auto; }
+
+/* SVG radar */
+.bioma-radar-svg { display:block; width:100%; height:auto; overflow:visible; }
+.bioma-radar-grid { stroke: rgba(6,95,70,0.08); stroke-width: 1; fill: none; }
+.bioma-radar-axis { stroke: rgba(6,95,70,0.06); stroke-width: 1; }
+.bioma-radar-label { fill: #065f46; font-weight: 600; font-size: 12px; }
+.bioma-radar-area { fill: rgba(6,95,70,0.16); stroke: rgba(6,95,70,0.9); stroke-width: 2; stroke-linejoin: round; opacity: 0; transition: opacity .45s ease; }
+.bioma-radar-point { stroke: #ffffff; stroke-width: 2; transition: transform .25s ease, opacity .25s ease; }
+
+/* visibilidade imediata em small screens */
+@media (max-width: 420px) {
+    .bioma-radar-label { font-size: 10px; }
+    .radar { max-width: 220px; }
+}
+
