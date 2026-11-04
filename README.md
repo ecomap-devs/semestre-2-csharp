@@ -78,3 +78,10 @@ aqui em 2026, a partir da cópia local do projeto.
 ## 👥 Equipe do 2º semestre
 
 **Bruno** · **Cesar** · **João Flávio** · **Victor** · **Vinicius**
+
+## 📄 Licença
+
+[MIT](LICENSE) para o código da equipe. Projeto acadêmico, sem fins lucrativos. A licença não
+cobre os dados de `wwwroot/meuarquivo4.json`, que não são da equipe, as fotos de
+`wwwroot/images/animais/`, cuja origem não foi registrada, nem as bibliotecas de `wwwroot/lib/`,
+que têm as próprias licenças.
